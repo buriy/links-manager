@@ -2,7 +2,7 @@
 
 import os
 from setuptools import setup
-import releaser
+import links_manager
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -16,14 +16,15 @@ def desc():
         return info
 
 setup(
-    name = 'releaser',
-    description = 'command line parsing speedster',
+    name = 'links_manager',
+    description = 'Python command-line utility to make symbolic links (symlinks) '
+		  'management much easier across various platforms.',
     long_description = desc(),
     license = 'BSD',
-    version = releaser.__version__,
-    author = releaser.__author__,
-    author_email = releaser.__email__,
-    url = 'http://hg.piranha.org.ua/releaser/',
+    version = links_manager.__version__,
+    author = links_manager.__author__,
+    author_email = links_manager.__email__,
+    url = '',
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -33,6 +34,6 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development',
         ],
-    py_modules = ['release', 'releaser'],
+    py_modules = ['manage-links', 'links_manager'],
     platforms='any',
     )
