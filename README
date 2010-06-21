@@ -1,0 +1,52 @@
+Python utility to make symbolic links (symlinks) management
+much easier across various platforms.
+
+Let me explain by example.
+
+Utility uses 2 files in the project directory:
+
+.links :
+
+/django/ = LIB/django-trunk/django
+/south/ = LIB/south/south
+/site_media/admin/ = LIB/django-trunk/django/contrib/admin/media
+
+.dirs :
+
+LIB = C:\Projects\django-lib
+
+Using these files, you can define your links in cross-platform way and
+store it in version control system.
+
+After you check out your project to the new platform (or updated 
+from repository), you type "manage-links.py links-reset", and symlinks
+are created for you according to the rules from the ".links" file.
+(Please note, that currently this function is not working).
+
+After you made a new symlink, type "manage-links.py links-commit" to
+put a new symlink information into ".links" file.
+
+To compare .links file with actual directory information, please
+use "manage-links.py links-list" command.
+
+Commands "manage-links.py links-list" and "manage-links.py dirs"
+display the data inside the ".links" and ".dirs" files accordingly.
+
+".dirs" file may be placed in project directory or user directory
+(or both), and defines common shortcuts for your paths.
+If such shortcut is not found for some path, then path is considered
+relative to the root of the project, and its head fragment won't be
+replaced, so for path A/b you'll get a relative link to A/b .
+
+Utility defines the following commands (taken from application help) :
+
+usage: manage-links.py <command> [options]
+
+commands:
+
+ dirs          Show all dirs in project filesystem
+ help          Show help for a given help topic or a help overview
+ links-commit  Commit links data into .links file
+ links-list    Show dirs shortcuts allowed in .links files
+ links-reset   Reset links data from .links file
+ links-show    Show all links in project filesystem
