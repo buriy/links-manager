@@ -48,8 +48,27 @@ def find_links(root):
             x = os.path.join(path, d)
             t = os.path.relpath(x, root)
             if is_symlink(x):
-                link_path = '/%s/' % t.replace(os.sep,'/')
+                link_path = '%s/' % t.replace(os.sep,'/')
                 real_path = get_real_path(x).replace(os.sep, '/')
                 links.append((link_path, real_path))
 
     return links
+
+def create_link(root, link, real):
+    if link.startswith('/'):
+        link = link[1:]
+    if link.endswith('/'):
+        link = link[:-1]
+    x = os.path.join(root, link)
+    if os.name != 'nt':
+      return os.symlink(real, x)
+    print "Not implemented yet. Please create manually: ", x, '->', real
+
+def remove_link(root, link):
+    if link.startswith('/'):
+        link = link[1:]
+    if link.endswith('/'):
+        link = link[:-1]
+    x = os.path.join(root, link)
+    return os.unlink(x)
+

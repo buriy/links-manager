@@ -1,23 +1,33 @@
 import os.path
 DOT_DIRS = '.dirs'
 DOT_LINKS = '.links'
+USER_DIR = os.getenv('HOME')
 
 def split_line(l):
     l = l.split('#', 1)[0] # split comments
     return [x.strip() for x in l.split('=', 1) if '=' in l]
 
-def read_dot_dirs(path):
+def read_dot_dirs(root):
+    path_list = [USER_DIR, root]
     dirs = {}
-    for source in [path, os.getenv('HOME')]:
-        filename = os.path.join(source, DOT_DIRS)
-        if not os.path.exists(filename):
-            continue
-        for l in open(filename, 'rt').readlines():
-            short, real = split_line(l)
-            dir = real.replace(os.sep, '/')
-            if not dir.endswith('/'):
-                dir += '/'
-            dirs[short] = dir
+    for source in path_list:
+        dirs.update(read_dot_dirs_file(source))
+    return dirs
+
+def norm_path(path):
+    path = path.strip().replace(os.sep, '/')
+    if not path.endswith('/'):
+        return path + '/'
+    return path
+
+def read_dot_dirs_file(path):
+    dirs = {}
+    filename = os.path.join(path, DOT_DIRS)
+    if not os.path.exists(filename):
+        return dirs
+    for l in open(filename, 'rt').readlines():
+        short, real = split_line(l)
+        dirs[short] = norm_path(real)
     return dirs
 
 def read_dot_links(path):
@@ -26,8 +36,14 @@ def read_dot_links(path):
     dirs = read_dot_dirs(path)
 
     links = {}
+
+    if not os.path.exists(filename):
+        return dirs, links
+
     for l in open(filename, 'rt').readlines():
         symlink, real = [x.replace(os.sep, '/') for x in split_line(l)]
+        if symlink.startswith('/'): 
+            symlink = symlink[1:]
         is_rel = not os.path.isabs(real)
         if is_rel and ('/' in real):
             head, tail = real.split('/', 1)
@@ -56,6 +72,9 @@ def write_dot_links(root, links):
     
     write_dot_file(root, DOT_LINKS, reals)
 
+def write_dot_dirs(path, dirs):
+    write_dot_file(path, DOT_DIRS, dirs)
+
 def write_dot_file(path, name, values):
     filename = os.path.join(path, name)
     w = open(filename, 'wt')
@@ -65,3 +84,4 @@ def write_dot_file(path, name, values):
         line = u"%s = %s\n" % (k, v)
         w.write(line.encode('utf-8'))
     w.close()
+
