@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 import links_manager
 
 def read(fname):
@@ -18,13 +18,13 @@ def desc():
 setup(
     name = 'links_manager',
     description = 'Python command-line utility to make symbolic links (symlinks) '
-		  'management much easier across various platforms.',
+                  'management much easier across various platforms.',
     long_description = desc(),
     license = 'BSD',
-    version = links_manager.__version__,
-    author = links_manager.__author__,
-    author_email = links_manager.__email__,
-    url = '',
+    version = "0.1",
+    author = "Yuri Baburov",
+    author_email = "burchik@gmail.com",
+    url = 'https://github.com/buriy/links-manager',
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -35,5 +35,10 @@ setup(
         'Topic :: Software Development',
         ],
     py_modules = ['manage-links', 'links_manager'],
+    packages = find_packages(exclude=[]),
     platforms='any',
-    )
+    entry_points = """
+    [console_scripts]
+    manage-links=links_manager.manage_links:main
+    """
+)

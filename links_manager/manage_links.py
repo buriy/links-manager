@@ -6,7 +6,7 @@ from links_manager.dotfiles import read_dot_dirs, write_dot_dirs, norm_path
 from links_manager.dotfiles import read_dot_dirs_file, USER_DIR
 
 @command(usage="%name ROOT")
-def links_show(cmd, root=('r', '.', 'Root directory')):
+def links_show(root=('r', '.', 'Root directory')):
     """Show all links in project filesystem"""
     links = find_links(root)
     _dirs, saved = read_dot_links(root)
@@ -53,19 +53,19 @@ def links_reset(root, verbose, force):
 
 
 @command(usage="%name ROOT")
-def links_commit(cmd, root=('r', '.', 'Root directory')):
+def links_commit(root=('r', '.', 'Root directory')):
     "Commit links data into .links file"
     write_dot_links(root, find_links(root))
 
 @command(usage="%name ROOT")
-def links_list(cmd, root=('r', '.', 'Root directory')):
+def links_list(root=('r', '.', 'Root directory')):
     """Show dirs shortcuts allowed in .links files"""
     _dirs, links = read_dot_links(root)
     for link, real_dir in links.iteritems():
         print "%-30s %s" % (link, real_dir)
 
 @command(usage="%name")
-def dirs_list(cmd, root=('r', '.', 'Root directory')):
+def dirs_list(root=('r', '.', 'Root directory')):
     """Show all dirs in project filesystem"""
     for link, real_dir in read_dot_dirs(root).iteritems():
         print "%-30s %s" % (link, real_dir)
@@ -82,7 +82,7 @@ def dirs_add(src, dest, user_home, root):
     write_dot_dirs(path, dirs)
 
 #@command(usage="%name ROOT")
-#def dirs_suggest(cmd, root='.'):
+#def dirs_suggest(root='.'):
 #    """Suggest dirs in project filesystem"""
 #    roots = []
 #    for link, real_dir in find_links(root):
